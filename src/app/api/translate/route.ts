@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { GoogleGenAI } from "@google/genai"
+import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request) {
   try {
@@ -73,6 +74,26 @@ export async function POST(req: Request) {
 
     try {
       const parsedData = JSON.parse(responseText)
+
+      // LƯU VÀO DATABASE (Chạy ngầm, không đợi để tránh làm chậm UX)
+      // Nhưng ở đây mình dùng prisma để lưu thật
+      try {
+        await prisma.bugTranslation.create({
+          data: {
+            bugName: text.substring(0, 100), // Lấy tag lỗi làm tên
+            severity: parsedData.severity || 0,
+            description: parsedData.whatIsHappening,
+            actionableAdvice: parsedData.actionableAdvice,
+            metaphor: parsedData.metaphor,
+            excuseToBoss: parsedData.excuseToBoss,
+            tone: tone,
+          }
+        })
+      } catch (dbError) {
+        console.error("Lỗi lưu Database:", dbError)
+        // Vẫn tiếp tục trả về kết quả cho user dù DB lỗi
+      }
+
       return NextResponse.json(parsedData, { status: 200 })
     } catch (parseError) {
       console.error("Lỗi khi parse JSON từ Gemini:", responseText)
