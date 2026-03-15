@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BugTranslation {
+  id               String   @id @default(cuid())
+  bugName          String
+  severity         Int
+  author           String   @default("Anonymous Dev")
+  description      String
+  actionableAdvice String
+  metaphor         String
+  excuseToBoss     String
+  tone             String
+  createdAt        DateTime @default(now())
+}

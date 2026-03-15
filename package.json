@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.45.0",
+    "@prisma/client": "^7.5.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.36.0",
     "lucide-react": "^0.577.0",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
